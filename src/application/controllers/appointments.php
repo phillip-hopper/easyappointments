@@ -115,6 +115,19 @@ class Appointments extends CI_Controller {
                 $appointment = $post_data['appointment'];
                 $customer = $post_data['customer'];
 
+                // the system requires a unique email address, so we will build one if the user did not enter one
+                if (empty($customer['email'])) {
+
+                    // firstName_lastName_phoneNumber
+                    $phony_email = $customer['first_name'] . '_' . $customer['last_name'] . '_' . $customer['phone_number'];
+
+                    // remove all non-alphanumeric characters
+                    $phony_email = preg_replace("/[^A-Za-z0-9_]/", '', $phony_email);
+
+                    // lower case
+                    $customer['email'] = strtolower($phony_email) . '@no.email.net';
+                }
+
                 if ($this->customers_model->exists($customer)) 
                         $customer['id'] = $this->customers_model->find_record_id($customer);
 					
@@ -195,10 +208,13 @@ class Appointments extends CI_Controller {
                                 . $appointment['hash'];
                     }
 
-                    $this->notifications->send_appointment_details($appointment, $provider, 
-                            $service, $customer,$company_settings, $customer_title, 
+                    // do not try to send to the phony email address
+                    if (strpos($customer['email'], 'no.email.net') === false) {
+                        $this->notifications->send_appointment_details($appointment, $provider,
+                            $service, $customer,$company_settings, $customer_title,
                             $customer_message, $customer_link, $customer['email']);
-                    
+                    }
+
                     if ($send_provider == TRUE) {
                         $this->notifications->send_appointment_details($appointment, $provider, 
                                 $service, $customer, $company_settings, $provider_title, 

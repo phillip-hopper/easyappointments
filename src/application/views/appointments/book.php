@@ -307,8 +307,8 @@
                                     <input type="text" id="last-name" class="required form-control" maxlength="250" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="email" class="control-label"><?php echo $this->lang->line('email'); ?> *</label>
-                                    <input type="text" id="email" class="required form-control" maxlength="250" />
+                                    <label for="email" class="control-label"><?php echo $this->lang->line('email'); ?></label>
+                                    <input type="text" id="email" class="form-control" maxlength="250" />
                                 </div>
                                 <div class="form-group">
                                     <label for="phone-number" class="control-label"><?php echo $this->lang->line('phone_number'); ?> *</label>

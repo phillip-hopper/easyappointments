@@ -377,7 +377,7 @@ var FrontendBook = {
     },
 
     /**
-     * This function validates the customer's data input. The user cannot contiue
+     * This function validates the customer's data input. The user cannot continue
      * without passing all the validation checks.
      * 
      * @return {bool} Returns the validation result.
@@ -400,10 +400,13 @@ var FrontendBook = {
             }
             
             // Validate email address.
-            if (!GeneralFunctions.validateEmail($('#email').val())) {
-                $('#email').parents('.form-group').addClass('has-error');
-                // $('#email').css('border', '2px solid red');
-                throw EALang['invalid_email'];
+            var $email = $('#email');
+            if ($email.val()) {
+                if (!GeneralFunctions.validateEmail($email.val())) {
+                    $email.parents('.form-group').addClass('has-error');
+                    // $email.css('border', '2px solid red');
+                    throw EALang['invalid_email'];
+                }
             }
             
             return true;

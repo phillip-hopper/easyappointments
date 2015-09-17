@@ -54,17 +54,18 @@ class Customers_Model extends CI_Model {
 
         return $customer['id'];
     }
-    
+
     /**
      * Check if a particular customer record already exists.
-     * 
-     * This method checks wether the given customer already exists in 
+     *
+     * This method checks wether the given customer already exists in
      * the database. It doesn't search with the id, but with the following
      * fields: "email"
-     * 
-     * @param array $customer Associative array with the customer's 
+     *
+     * @param array $customer Associative array with the customer's
      * data. Each key has the same name with the database fields.
      * @return bool Returns wether the record exists or not.
+     * @throws Exception
      */
     public function exists($customer) {
         if (!isset($customer['email'])) {
@@ -82,13 +83,14 @@ class Customers_Model extends CI_Model {
         
         return ($num_rows > 0) ? TRUE : FALSE;
     }
-    
+
     /**
      * Insert a new customer record to the database.
-     * 
+     *
      * @param array $customer Associative array with the customer's
      * data. Each key has the same name with the database fields.
      * @return int Returns the id of the new record.
+     * @throws Exception
      */
     private function insert($customer) {
         // Before inserting the customer we need to get the customer's role id
@@ -107,16 +109,17 @@ class Customers_Model extends CI_Model {
         
         return intval($this->db->insert_id());
     }
-    
+
     /**
      * Update an existing customer record in the database.
-     * 
+     *
      * The customer data argument should already include the record
      * id in order to process the update operation.
-     * 
+     *
      * @param array $customer Associative array with the customer's
      * data. Each key has the same name with the database fields.
      * @return int Returns the updated record id.
+     * @throws Exception
      */
     private function update($customer) {        
         // Do not update empty string values.
@@ -132,19 +135,20 @@ class Customers_Model extends CI_Model {
         
         return intval($customer['id']);
     }
-    
+
     /**
-     * Find the database id of a customer record. 
-     * 
-     * The customer data should include the following fields in order to 
+     * Find the database id of a customer record.
+     *
+     * The customer data should include the following fields in order to
      * get the unique id from the database: "email"
-     * 
-     * <strong>IMPORTANT!</strong> The record must already exists in the 
+     *
+     * <strong>IMPORTANT!</strong> The record must already exists in the
      * database, otherwise an exception is raised.
-     * 
-     * @param array $customer Array with the customer data. The 
+     *
+     * @param array $customer Array with the customer data. The
      * keys of the array should have the same names as the db fields.
      * @return int Returns the id.
+     * @throws Exception
      */
     public function find_record_id($customer) {
         if (!isset($customer['email'])) {
@@ -167,12 +171,13 @@ class Customers_Model extends CI_Model {
         
         return $result->row()->id;
     }
-    
+
     /**
      * Validate customer data before the insert or update operation is executed.
-     * 
+     *
      * @param array $customer Contains the customer data.
      * @return bool Returns the validation result.
+     * @throws Exception
      */
     public function validate($customer) {
         $this->load->helper('data_validation');
@@ -221,12 +226,13 @@ class Customers_Model extends CI_Model {
 
         return TRUE;
     }
-    
+
     /**
      * Delete an existing customer record from the database.
-     * 
+     *
      * @param numeric $customer_id The record id to be deleted.
      * @return bool Returns the delete operation result.
+     * @throws Exception
      */
     public function delete($customer_id) {
         if (!is_numeric($customer_id)) {
@@ -240,14 +246,15 @@ class Customers_Model extends CI_Model {
         
         return $this->db->delete('ea_users', array('id' => $customer_id));
     }
-    
+
     /**
      * Get a specific row from the appointments table.
-     * 
+     *
      * @param numeric $customer_id The record's id to be returned.
      * @return array Returns an associative array with the selected
-     * record's data. Each key has the same name as the database 
+     * record's data. Each key has the same name as the database
      * field names.
+     * @throws Exception
      */
     public function get_row($customer_id) {
         if (!is_numeric($customer_id)) {
@@ -255,14 +262,15 @@ class Customers_Model extends CI_Model {
         }
         return $this->db->get_where('ea_users', array('id' => $customer_id))->row_array();
     }
-    
+
     /**
      * Get a specific field value from the database.
-     * 
+     *
      * @param string $field_name The field name of the value to be
      * returned.
      * @param int $customer_id The selected record's id.
      * @return string Returns the records value from the database.
+     * @throws Exception
      */
     public function get_value($field_name, $customer_id) {
         if (!is_numeric($customer_id)) {
